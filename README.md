@@ -148,24 +148,24 @@ Magic right? (No need to have a pretty rendered output, it’s a JSON, only the 
 
 Ok, let starts:
 
-- Create a folder api at the root of the project with an empty file __init__.py
-- Create a folder v1 inside api:
-    - create an empty file __init__.py
-    - create a file app.py:
-        - create a variable app, instance of Flask
-        - import storage from models
-        - import app_views from api.v1.views
-        - register the blueprint app_views to your Flask instance app
-        - declare a method to handle @app.teardown_appcontext that calls storage.close()
-        - inside if __name__ == "__main__":, run your Flask server (variable app) with:
+- Create a folder `api` at the root of the project with an empty file `__init__.py`
+- Create a folder `v1` inside `api`:
+    - create an empty file `__init__.py`
+    - create a file `app.py`:
+        - create a variable `app`, instance of `Flask`
+        - import `storage` from `models`
+        - import `app_views` from `api.v1.views`
+        - register the blueprint `app_views` to your Flask instance `app`
+        - declare a method to handle `@app.teardown_appcontext` that calls storage.close()
+        - inside `if __name__ == "__main__":`, run your Flask server (variable app) with:
             - host = environment variable HBNB_API_HOST or 0.0.0.0 if not defined
             - port = environment variable HBNB_API_PORT or 5000 if not defined
             - threaded=True
 - Create a folder views inside v1:
-    - create a file __init__.py:
-        - import Blueprint from flask doc
+    - create a file `__init__.py`:
+        - import Blueprint from flask [doc](https://intranet.alxswe.com/rltoken/y3Lhj6w1g59MA_HPtc578w)
         - create a variable app_views which is an instance of Blueprint (url prefix must be /api/v1)
-        - wildcard import of everything in the package api.v1.views.index => PEP8 will complain about it, don’t worry, it’s normal and this file (v1/views/__init__.py) won’t be check.
+        - wildcard import of everything in the package api.v1.views.index => PEP8 will complain about it, don’t worry, it’s normal and this file (`v1/views/__init__.py`) won’t be check.
     - create a file index.py
         - import app_views from api.v1.views
         - create a route /status on the object app_views that returns a JSON: "status": "OK" (see example)
@@ -174,3 +174,71 @@ Ok, let starts:
 
 - GitHub repository: `AirBnB_clone_v3`
 - File: `api/__init__.py, api/v1/__init__.py, api/v1/views/__init__.py, api/v1/views/index.py, api/v1/app.py`
+
+#### 4. Some stats?
+
+Create an endpoint that retrieves the number of each objects by type:
+
+- In api/v1/views/index.py
+- Route: /api/v1/stats
+- You must use the newly added count() method from storage
+
+
+```
+guillaume@ubuntu:~/AirBnB_v3$ curl -X GET http://0.0.0.0:5000/api/v1/stats
+{
+  "amenities": 47,
+  "cities": 36,
+  "places": 154,
+  "reviews": 718,
+  "states": 27,
+  "users": 31
+}
+guillaume@ubuntu:~/AirBnB_v3$
+```
+
+**Repo:**
+
+- GitHub repository: `AirBnB_clone_v3`
+- File: `api/v1/views/index.py`
+
+#### 5. Not found
+
+Designers are really creative when they have to design a “404 page”, a “Not found”… [34 brilliantly designed 404 error pages](https://intranet.alxswe.com/rltoken/8NwELW0j77kZ1jTM6hJFhA)
+
+Today it’s different, because you won’t use HTML and CSS, but JSON!
+
+In `api/v1/app.py`, create a handler for 404 errors that returns a JSON-formatted 404 status code response. The content should be: "error": "Not found"
+
+```
+guillaume@ubuntu:~/AirBnB_v3$ curl -X GET http://0.0.0.0:5000/api/v1/nop
+{
+  "error": "Not found"
+}
+guillaume@ubuntu:~/AirBnB_v3$ curl -X GET http://0.0.0.0:5000/api/v1/nop -vvv
+*   Trying 0.0.0.0...
+* TCP_NODELAY set
+* Connected to 0.0.0.0 (127.0.0.1) port 5000 (#0)
+> GET /api/v1/nop HTTP/1.1
+> Host: 0.0.0.0:5000
+> User-Agent: curl/7.51.0
+> Accept: */*
+>
+* HTTP 1.0, assume close after body
+< HTTP/1.0 404 NOT FOUND
+< Content-Type: application/json
+< Content-Length: 27
+< Server: Werkzeug/0.12.1 Python/3.4.3
+< Date: Fri, 14 Apr 2017 23:43:24 GMT
+<
+{
+  "error": "Not found"
+}
+guillaume@ubuntu:~/AirBnB_v3$
+```
+
+**Repo:**
+
+- GitHub repository: `AirBnB_clone_v3`
+- File: `api/v1/app.py`
+
