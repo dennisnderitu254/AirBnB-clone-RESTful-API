@@ -684,3 +684,60 @@ Updates a Review object: PUT /api/v1/reviews/<review_id>
 
 - GitHub repository: `AirBnB_clone_v3`
 - File: `api/v1/views/places_reviews.py, api/v1/views/__init__.py`
+
+#### 12. HTTP access control (CORS)
+
+A resource makes a cross-origin HTTP request when it requests a resource from a different domain, or port, than the one the first resource itself serves.
+
+Read the full definition [here](https://intranet.alxswe.com/rltoken/D55IFF8lgZDLPyIX6b6C5A)
+
+Why do we need this?
+
+Because you will soon start allowing a web client to make requests your API. If your API doesn’t have a correct CORS setup, your web client won’t be able to access your data.
+
+With Flask, it’s really easy, you will use the class CORS of the module flask_cors.
+
+How to install it: $ pip3 install flask_cors
+
+Update api/v1/app.py to create a CORS instance allowing: /* for 0.0.0.0
+
+You will update it later when you will deploy your API to production.
+
+Now you can see this HTTP Response Header: < Access-Control-Allow-Origin: 0.0.0.0
+
+```
+guillaume@ubuntu:~/AirBnB_v3$ curl -X GET http://0.0.0.0:5000/api/v1/cities/1da255c0-f023-4779-8134-2b1b40f87683 -vvv
+*   Trying 0.0.0.0...
+* TCP_NODELAY set
+* Connected to 0.0.0.0 (127.0.0.1) port 5000 (#0)
+> GET /api/v1/states/2b9a4627-8a9e-4f32-a752-9a84fa7f4efd/cities/1da255c0-f023-4779-8134-2b1b40f87683 HTTP/1.1
+> Host: 0.0.0.0:5000
+> User-Agent: curl/7.51.0
+> Accept: */*
+>
+* HTTP 1.0, assume close after body
+< HTTP/1.0 200 OK
+< Content-Type: application/json
+< Access-Control-Allow-Origin: 0.0.0.0
+< Content-Length: 236
+< Server: Werkzeug/0.12.1 Python/3.4.3
+< Date: Sun, 16 Apr 2017 04:20:13 GMT
+<
+{
+  "__class__": "City",
+  "created_at": "2017-03-25T02:17:06",
+  "id": "1da255c0-f023-4779-8134-2b1b40f87683",
+  "name": "New Orleans",
+  "state_id": "2b9a4627-8a9e-4f32-a752-9a84fa7f4efd",
+  "updated_at": "2017-03-25T02:17:06"
+}
+* Curl_http_done: called premature == 0
+* Closing connection 0
+guillaume@ubuntu:~/AirBnB_v3$
+```
+
+**Repo:**
+
+- GitHub repository: `AirBnB_clone_v3`
+- File: `api/v1/app.py`
+
