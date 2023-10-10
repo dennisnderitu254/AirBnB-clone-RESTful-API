@@ -741,3 +741,38 @@ guillaume@ubuntu:~/AirBnB_v3$
 - GitHub repository: `AirBnB_clone_v3`
 - File: `api/v1/app.py`
 
+#### 13. Place - Amenity
+
+Create a new view for the link between Place objects and Amenity objects that handles all default RESTFul API actions:
+
+- In the file api/v1/views/places_amenities.py
+- You must use to_dict() to retrieve an object into a valid JSON
+- Update api/v1/views/__init__.py to import this new file
+- Depending of the storage:
+    - DBStorage: list, create and delete Amenity objects from amenities relationship
+    - FileStorage: list, add and remove Amenity ID in the list amenity_ids of a Place object
+
+Retrieves the list of all Amenity objects of a Place: GET /api/v1/places/<place_id>/amenities
+
+- If the place_id is not linked to any Place object, raise a 404 error
+
+Deletes a Amenity object to a Place: DELETE /api/v1/places/<place_id>/amenities/<amenity_id>
+
+- If the place_id is not linked to any Place object, raise a 404 error
+- If the amenity_id is not linked to any Amenity object, raise a 404 error
+- If the Amenity is not linked to the Place before the request, raise a 404 error
+- Returns an empty dictionary with the status code 200
+
+Link a Amenity object to a Place: POST /api/v1/places/<place_id>/amenities/<amenity_id>
+
+- No HTTP body needed
+- If the place_id is not linked to any Place object, raise a 404 error
+- If the amenity_id is not linked to any Amenity object, raise a 404 error
+- If the Amenity is already linked to the Place, return the Amenity with the status code 200
+- Returns the Amenity with the status code 201
+
+**Repo:**
+
+- GitHub repository: `AirBnB_clone_v3`
+- File: `api/v1/views/places_amenities.py, api/v1/views/__init__.py`
+
